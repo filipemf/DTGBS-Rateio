@@ -30,4 +30,17 @@ module.exports = {
       config: {},
     },
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'filipemf',
+          name: 'DTGBS-Rateio',
+        },
+        prerelease: false,
+        draft: false,
+      }
+    }
+  ]
 };
