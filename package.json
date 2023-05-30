@@ -1,7 +1,7 @@
 {
   "name": "rateio",
   "productName": "DTGBS - Rateio",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "My Electron application description",
   "main": "src/main.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "package:build": "npm run make && electron-builder --publish=always",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "publish2": "electron-builder --publish=always -mwl",
+    "publish2": "electron-builder --win --publish=always",
+    "publish:win": "electron-builder --win -p always",
     "lint": "echo \"No linting configured\""
   },
   "keywords": [],
@@ -44,6 +45,38 @@
       "repo": "DTGBS-Rateio"
     }
   ],
+  "build": {
+    "appId": "com.dtbgs.rateio.app",
+    "productName": "DTGBS Rateio",
+    "target": "NSIS",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "filipemf",
+        "repo": "DTGBS-Rateio"
+      }
+    ],
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "installerIcon": "icon3.ico",
+      "installerHeaderIcon": "icon3.ico"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "./resources/icon3.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "./resources/icon2.icns"
+    },
+    "extraFiles": [
+      "resources"
+    ],
+    "asarUnpack": [
+      "engine"
+    ]
+  },
   "config": {
     "forge": {
       "packagerConfig": {
