@@ -30,7 +30,7 @@ function readExcelFileFlat(sheetName) {
   const file = dialog.showOpenDialogSync({
     properties: ['openFile'],
     filters: [
-      { name: 'Excel Files', extensions: ['xlsx'] },
+      { name: 'Excel Files', extensions: ['xlsx', 'xls'] },
       { name: 'All Files', extensions: ['*'] }
     ]
   });
@@ -61,6 +61,7 @@ function readExcelFileFlat(sheetName) {
     const lastDay = new Date(year, month, 0).getDate();
 
     const defaultDate = `${year}-${month.toString().padStart(2, '0')}-${lastDay.toString().padStart(2, '0')}`;
+    
 
     let dateTables = `
       <div style="display: inline-grid;">
@@ -112,7 +113,7 @@ function readExcelFileFlat(sheetName) {
           let admissao = row[admissaoIndex];
 
           if (
-            (situacao === 'Trabalhando' && isAfter(admissao, formattedStartDate)) ||
+            (situacao === 'Trabalhando' && isAfter(admissao, formattedEndDate)) ||
             (situacao === 'Demitido' && isAfter(formattedStartDate, dataDemissao))
           ) {
             console.log(row)
@@ -135,6 +136,8 @@ function readExcelFileFlat(sheetName) {
         }
 
         console.log('Cód Ccusto Counts:', codCcustoCounts);
+
+        const sum = Object.values(codCcustoCounts).reduce((acc, curr) => acc + curr, 0);
 
         // Divide result.value by the total count for each Cód Ccusto
         const dividedResults = {};
@@ -167,6 +170,7 @@ function readExcelFileFlat(sheetName) {
             <h4 style='font-weight: 900'>Valor do Rateio: ${result.value}</h4>
             <h4 style='font-weight: 900'>Data de ínicio: ${formattedStartDate}</h4>
             <h4 style='font-weight: 900'>Data final: ${formattedEndDate}</h4>
+            <h4 style='font-weight: 900'>Head Count Total: ${sum}</h4>
 
             <table style="border-collapse: collapse; width: auto;">
               <thead style="background-color: #ff0077; color: white;">
@@ -214,7 +218,7 @@ function readExcelFilePerson(sheetName) {
   const file = dialog.showOpenDialogSync({
     properties: ['openFile'],
     filters: [
-      { name: 'Excel Files', extensions: ['xlsx'] },
+      { name: 'Excel Files', extensions: ['xlsx', 'xls'] },
       { name: 'All Files', extensions: ['*'] }
     ]
   });
@@ -296,7 +300,7 @@ function readExcelFilePerson(sheetName) {
           let admissao = row[admissaoIndex];
 
           if (
-            (situacao === 'Trabalhando' && isAfter(admissao, formattedStartDate)) ||
+            (situacao === 'Trabalhando' && isAfter(admissao, formattedEndDate)) ||
             (situacao === 'Demitido' && isAfter(formattedStartDate, dataDemissao))
           ) {
             console.log(row)
@@ -319,6 +323,7 @@ function readExcelFilePerson(sheetName) {
         }
 
         console.log('Cód Ccusto Counts:', codCcustoCounts);
+        const sum = Object.values(codCcustoCounts).reduce((acc, curr) => acc + curr, 0);
 
         const totalCount = Object.values(codCcustoCounts).reduce((acc, count) => acc + count, 0);
 
@@ -352,6 +357,7 @@ function readExcelFilePerson(sheetName) {
             <h4 style='font-weight: 900'>Valor do Rateio: ${result.value}</h4>
             <h4 style='font-weight: 900'>Data de ínicio: ${formattedStartDate}</h4>
             <h4 style='font-weight: 900'>Data final: ${formattedEndDate}</h4>
+            <h4 style='font-weight: 900'>Head Count Total: ${sum}</h4>
 
             <table style="border-collapse: collapse; width: auto;">
               <thead style="background-color: #ff0077; color: white;">
@@ -402,13 +408,17 @@ function exportTableToExcel(button) {
 
     let rateioType = table.previousElementSibling.previousElementSibling.innerText.split(': ')[1];
     let rateioValue = table.previousElementSibling.innerText.split(': ')[1];
-    let anotherTable = table.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerText.split(': ')[1];
-
+    let formattedStartDate = table.previousElementSibling.previousElementSibling.previousElementSibling.innerText.split(': ')[1];
+    let formattedEndDate = table.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerText.split(': ')[1];
+    let sum = table.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerText.split(': ')[1];
+    
     let rows = Array.from(table.rows).map(row => Array.from(row.cells).map(cell => cell.innerText));
-
-    rows.unshift(['Tipo do Rateio', anotherTable]);
-    rows.unshift(['Fim do Rateio', rateioValue]);
-    rows.unshift(['Início do Rateio', rateioType]);
+    
+    rows.unshift(['Head Count Total', rateioValue]);
+    rows.unshift(['Valor do Rateio', formattedEndDate]);
+    rows.unshift(['Data de início', formattedStartDate]);
+    rows.unshift(['Data final', rateioType]);
+    rows.unshift(['Tipo do Rateio', sum]);
 
     let buffer = xlsx.build([{name: 'Sheet1', data: rows}]);
 
