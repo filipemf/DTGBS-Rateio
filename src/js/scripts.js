@@ -541,6 +541,7 @@ function readExcelFileByValue(sheetName) {
               <td>${codCcusto}</td>
               <td>${descricaoCcusto}</td>
               <td>${count}</td>
+              <td>${result.value}</td>
               <td>${dividedValue.toFixed(2).replace('.',',')}</td>
             </tr>
           `;
@@ -562,6 +563,7 @@ function readExcelFileByValue(sheetName) {
                   <th style="padding: 8px; text-align: center;">Cód Ccusto</th>
                   <th style="padding: 8px; text-align: center;">Descrição Ccusto</th>
                   <th style="padding: 8px; text-align: center;">Head Count</th>
+                  <th style="padding: 8px; text-align: center;">Valor</th>
                   <th style="padding: 8px; text-align: center;">Rateio</th>
                 </tr>
               </thead>
