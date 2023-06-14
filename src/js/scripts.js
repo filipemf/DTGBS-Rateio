@@ -352,7 +352,7 @@ function readExcelFilePerson(sheetName) {
               <td>${codCcusto}</td>
               <td>${descricaoCcusto}</td>
               <td>${count}</td>
-              <td>${dividedValue.toFixed(2)}</td>
+              <td>${dividedValue.toFixed(2).replace('.',',')}</td>
             </tr>
           `;
         });
