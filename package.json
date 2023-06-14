@@ -1,7 +1,7 @@
 {
   "name": "rateio",
   "productName": "DTGBS - Rateio",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "My Electron application description",
   "main": "src/main.js",
   "scripts": {
